@@ -9,7 +9,7 @@ The categories are not exclusive - for example an image might be classified as [
 
 | haze primary                    | clear agriculture primary water | clear agriculture primary habitation road |
 |--------------------------------|---------------------------------|------------------------------------------|
-|![](./sample_images/train_0.png)| ![](./sample_images/train_1.png)| ![](./sample_images/train_4.png)         |
+|![](./sample_images/train_0.jpg)| ![](./sample_images/train_1.jpg)| ![](./sample_images/train_4.jpg)         |
 
 ## Usage
 
