@@ -45,7 +45,7 @@ def load_tiff(filename):
         return np.dstack([r, g, b, nir])
 
 
-def get_data_sets(data_dir=TIF_DIR):
+def get_data_sets(data_dir=TIF_DIR, set_fractions=SET_FRACTIONS):
     # The callable that will return sets of images to be used in training, validation and testing
     #
     # OUTPUT: a dictionary containing a Dataset object for each set [train, validation, test].
@@ -56,8 +56,8 @@ def get_data_sets(data_dir=TIF_DIR):
     data_sets = {}
     start_idx = 0
 
-    for set_name in SET_FRACTIONS.keys():
-        set_size = math.floor(num_images * SET_FRACTIONS[set_name])
+    for set_name in set_fractions.keys():
+        set_size = math.floor(num_images * set_fractions[set_name])
         image_set = []
 
         for idx in range(start_idx, start_idx + set_size):
