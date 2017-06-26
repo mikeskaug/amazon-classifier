@@ -18,21 +18,34 @@ def random_forest_clf(features, labels, **kwargs):
     return clf
 
 
+def reshape_features(*features):
+    '''
+    each "feature" in features is a numpy array of shape [num_samples, num_channels, num_metrics]
+    Each of these should be flattened so there is one row for each sample and then concatenated
+    horizontally.
+    '''
+    reshaped = []
+    for i, feature in enumerate(features):
+        shape = feature.shape
+        reshaped[i] = feature.reshape((shape[0], shape[1] * shape[2]))
+
+    return np.hstack(*reshaped)
+
+
 def predict():
     data = get_data_sets(data_dir='./data/train-tif-v2')
     (images, labels) = data['train'].get_image_batch(100)
-    (rbgn_hists, power_spectra) = summary_stats(images, labels)
-    ps_shape = power_spectra.shape
-    rbgn_shape = rbgn_hists.shape
+    (rgbn_hists, power_spectra) = summary_stats(images, labels)
+    train_features = reshape_features(rgbn_hists, power_spectra)
 
-    # flatten the color channel dimensions so there is one row per image
-    ps_reshaped = power_spectra.reshape((ps_shape[0], ps_shape[1] * ps_shape[2]))
-    rbgn_reshaped = rbgn_hists.reshape((rbgn_shape[0], rbgn_shape[1] * rbgn_shape[2]))
+    rf_classifier = random_forest_clf(train_features, labels)
 
-    # concatenate the two statistics to get one long row of "features" per image
-    features = np.hstack(rbgn_reshaped, ps_reshaped)
+    (eval_images, eval_labels) = data['validation'].get_image_batch(100)
+    (rgbn_hists, power_spectra) = summary_stats(eval_images, eval_labels)
+    eval_features = reshape_features(rgbn_hists, power_spectra)
 
-    rf_classifier = random_forest_clf(features, labels)
+    predicted_labels = rf_classifier.predict(eval_features)
+
 
 if __name__ == "__main__":
     predict()
