@@ -41,7 +41,7 @@ def predict():
     train_features = reshape_features(rgbn_hists, power_spectra)
 
     print('training classifier...')
-    rf_classifier = random_forest_clf(train_features, labels)
+    rf_classifier = random_forest_clf(train_features, labels, class_weight='balanced_subsample')
 
     print('making predictions...')
     (eval_images, eval_labels) = data['validation'].get_image_batch(100)
