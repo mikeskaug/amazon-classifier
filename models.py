@@ -1,4 +1,5 @@
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import fbeta_score
 import numpy as np
 
 from dataset import get_data_sets
@@ -25,26 +26,31 @@ def reshape_features(*features):
     horizontally.
     '''
     reshaped = []
-    for i, feature in enumerate(features):
+    for feature in features:
         shape = feature.shape
-        reshaped[i] = feature.reshape((shape[0], shape[1] * shape[2]))
+        reshaped.append(feature.reshape((shape[0], shape[1] * shape[2])))
 
-    return np.hstack(*reshaped)
+    return np.hstack(reshaped)
 
 
 def predict():
+    print('preparing data...')
     data = get_data_sets(data_dir='./data/train-tif-v2')
     (images, labels) = data['train'].get_image_batch(100)
     (rgbn_hists, power_spectra) = summary_stats(images, labels)
     train_features = reshape_features(rgbn_hists, power_spectra)
 
+    print('training classifier...')
     rf_classifier = random_forest_clf(train_features, labels)
 
+    print('making predictions...')
     (eval_images, eval_labels) = data['validation'].get_image_batch(100)
     (rgbn_hists, power_spectra) = summary_stats(eval_images, eval_labels)
     eval_features = reshape_features(rgbn_hists, power_spectra)
-
     predicted_labels = rf_classifier.predict(eval_features)
+
+    f2 = fbeta_score(eval_labels, predicted_labels, beta=2, average='samples')
+    print('F2 score: {}'.format(f2))
 
 
 if __name__ == "__main__":
