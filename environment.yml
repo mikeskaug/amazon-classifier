@@ -34,6 +34,7 @@ dependencies:
 - conda-forge::gettext=0.19.8.1=0
 - conda-forge::giflib=5.1.4=0
 - conda-forge::glib=2.51.4=0
+- conda-forge::h5py=2.7.0=np112py36_1
 - conda-forge::harfbuzz=1.3.4=2
 - conda-forge::hdf4=4.2.12=0
 - conda-forge::hdf5=1.8.18=0
@@ -55,6 +56,7 @@ dependencies:
 - conda-forge::jupyter_console=5.1.0=py36_0
 - conda-forge::jupyter_core=4.3.0=py36_0
 - conda-forge::kealib=1.4.7=2
+- conda-forge::keras=2.0.2=py36_1
 - conda-forge::krb5=1.14.2=0
 - conda-forge::libdap4=3.18.3=2
 - conda-forge::libffi=3.2.1=3
@@ -71,6 +73,7 @@ dependencies:
 - conda-forge::markupsafe=1.0=py36_0
 - conda-forge::matplotlib=2.0.2=np112py36_0
 - conda-forge::mistune=0.7.4=py36_0
+- conda-forge::mock=2.0.0=py36_0
 - conda-forge::nbconvert=5.2.1=py36_1
 - conda-forge::nbformat=4.3.0=py36_0
 - conda-forge::ncurses=5.9=10
@@ -84,6 +87,7 @@ dependencies:
 - conda-forge::pandoc=1.19.2=0
 - conda-forge::pandocfilters=1.4.1=py36_0
 - conda-forge::patsy=0.4.1=py36_0
+- conda-forge::pbr=3.1.1=py36_0
 - conda-forge::pcre=8.39=0
 - conda-forge::pexpect=4.2.1=py36_0
 - conda-forge::pickleshare=0.7.3=py36_0
@@ -91,6 +95,7 @@ dependencies:
 - conda-forge::pixman=0.34.0=0
 - conda-forge::proj4=4.9.3=3
 - conda-forge::prompt_toolkit=1.0.14=py36_0
+- conda-forge::protobuf=3.3.0=py36_3
 - conda-forge::ptyprocess=0.5.1=py36_0
 - conda-forge::pygments=2.2.0=py36_0
 - conda-forge::pyparsing=2.2.0=py36_0
@@ -98,12 +103,14 @@ dependencies:
 - conda-forge::python=3.6.1=3
 - conda-forge::python-dateutil=2.6.0=py36_0
 - conda-forge::pytz=2017.2=py36_0
+- conda-forge::pyyaml=3.12=py36_1
 - conda-forge::pyzmq=16.0.2=py36_2
 - conda-forge::qt=5.6.2=1
 - conda-forge::qtconsole=4.3.0=py36_0
 - conda-forge::rasterio=1.0a9=np112py36_0
 - conda-forge::readline=6.2=0
 - conda-forge::s3transfer=0.1.10=py36_1
+- conda-forge::scikit-learn=0.18.2=np112py36_blas_openblas_200
 - conda-forge::scipy=0.19.0=np112py36_blas_openblas_200
 - conda-forge::seaborn=0.7.1=py36_0
 - conda-forge::setuptools=33.1.1=py36_0
@@ -113,6 +120,7 @@ dependencies:
 - conda-forge::snuggs=1.4.1=py36_0
 - conda-forge::sqlite=3.13.0=1
 - conda-forge::statsmodels=0.8.0=np112py36_0
+- conda-forge::tensorflow=1.0.0=py36_0
 - conda-forge::terminado=0.6=py36_0
 - conda-forge::testpath=0.3=py36_0
 - conda-forge::tk=8.5.19=1
@@ -125,6 +133,7 @@ dependencies:
 - conda-forge::x264=20131217=3
 - conda-forge::xerces-c=3.1.4=3
 - conda-forge::xz=5.2.2=0
+- conda-forge::yaml=0.1.6=0
 - conda-forge::zeromq=4.2.1=1
 - conda-forge::zlib=1.2.11=0
 - pip:
