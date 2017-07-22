@@ -143,4 +143,3 @@ dependencies:
   - jupyter-core==4.3.0
   - prompt-toolkit==1.0.14
 prefix: /Users/misk6091/miniconda3/envs/amazon-classifier
-

@@ -101,3 +101,15 @@ class Dataset:
             self.batch_idx += 1
 
         return (image_array, label_array)
+
+    def batch_generator(self, batch_size, mod=lambda x: x):
+        '''
+        A generator that will yield batches of training data
+        NOTE: this generator never terminates, so don't do something like list(batch_generator)
+
+        mod: an optional function that modifies the raw images and labels returned by get_image_batch
+        and returns a new tupel (images, labels)
+        '''
+        while True:
+            (images, labels) = self.get_image_batch(batch_size)
+            yield mod((images, labels))
