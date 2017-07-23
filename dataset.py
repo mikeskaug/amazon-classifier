@@ -45,6 +45,17 @@ def load_tiff(filename):
         return np.dstack([r, g, b, nir])
 
 
+def mean_intensity(dataset, channels=[0, 1, 2, 3]):
+    means = 0
+    count = 0
+    for images, labels in dataset.batch_generator(100):
+        for channel in channels:
+            means += np.mean(images[:, :, :, channel])
+        count += 1
+
+    return means / count
+
+
 def get_data_sets(data_dir=TIF_DIR, set_fractions=SET_FRACTIONS):
     # The callable that will return sets of images to be used in training, validation and testing
     #
@@ -103,14 +114,32 @@ class Dataset:
 
         return transform((image_array, label_array))
 
-    def batch_generator(self, batch_size, transform=lambda x: x):
+    def batch_generator(self, batch_size, transform=lambda x: x, loop=False):
         '''
         A generator that will yield batches of training data
-        NOTE: this generator never terminates, so don't do something like list(batch_generator)
 
         transform: an optional function that modifies the raw images and labels returned by get_image_batch
         and returns a new tupel (images, labels)
         '''
+        if loop:
+            return self._infinite_generator(batch_size, transform)
+        else:
+            return self._finite_generator(batch_size, transform)
+
+    def _infinite_generator(self, batch_size, transform):
+        '''
+        Will continue to yield batches of data without end, so don't use it in a list comprehension
+        '''
         while True:
             (images, labels) = self.get_image_batch(batch_size, transform)
             yield (images, labels)
+
+    def _finite_generator(self, batch_size, transform):
+        '''
+        Will yield batches of data for one epoch, i.e. all samples have been used one time
+        '''
+        num = 1
+        while num * batch_size <= self.num_examples:
+            (images, labels) = self.get_image_batch(batch_size, transform)
+            yield (images, labels)
+            num += 1

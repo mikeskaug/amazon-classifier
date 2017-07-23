@@ -5,7 +5,7 @@ from keras.layers import Dense, GlobalAveragePooling2D
 
 import numpy as np
 
-from dataset import get_data_sets
+from dataset import get_data_sets, mean_intensity
 
 
 def cnn_model():
@@ -64,6 +64,7 @@ def freeze_layers(model, freeze_layers=[]):
 
 def train(model, data_dir='./data/train-tif-v2', batch_size=25, num_epochs=10):
     data = get_data_sets(data_dir)
+    mean_rgb = mean_intensity(data['train'], channels=[0, 1, 2])
     # rescale input pixel values to match those in VGG16 paper?
     model.compile(optimizer='rmsprop',
                   loss='binary_crossentropy',
@@ -71,11 +72,15 @@ def train(model, data_dir='./data/train-tif-v2', batch_size=25, num_epochs=10):
 
     def image_mod(batch):
         images, labels = batch
-        # drop the last NIR channel
+        # drop the last, NIR channel
         images = images[:, :, :, :-1]
+        # subtract the mean rgb value, as done in the VGG16 paper
+        images = images - mean_rgb
+        # rescale to 8-bit range used by the pretrained VGG16 model
+        images = images * (2**8) / (2**16)
         return (images, labels)
 
-    model.fit_generator(data['train'].batch_generator(batch_size, mod=image_mod),
+    model.fit_generator(data['train'].batch_generator(batch_size, transform=image_mod, loop=True),
                         steps_per_epoch=data['train'].num_examples / batch_size,
                         epochs=num_epochs)
     return model
