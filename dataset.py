@@ -67,7 +67,7 @@ def get_data_sets(data_dir=TIF_DIR, set_fractions=SET_FRACTIONS):
 
         start_idx += set_size
         random.shuffle(image_set)
-        data_sets[set_name] = Dataset(image_set)
+        data_sets[set_name] = Dataset(image_set, labels)
 
     return data_sets
 
@@ -78,14 +78,15 @@ class Dataset:
     for delivering batches of training data
     '''
 
-    def __init__(self, data):
+    def __init__(self, data, labels):
         self.batch_idx = 0
         self.data = data
+        self.labels = labels
         self.num_examples = len(data)
         (self.IMG_X, self.IMG_Y, self.IMG_D) = load_tiff(data[0][0]).shape
         self.num_labels = len(data[0][1])
 
-    def get_image_batch(self, batch_size):
+    def get_image_batch(self, batch_size, transform=lambda x: x):
         # return a new batch of images and labels
         if self.batch_idx + batch_size > self.num_examples:
             self.batch_idx = 0
@@ -100,16 +101,16 @@ class Dataset:
             label_array[j, :] = self.data[i][1]
             self.batch_idx += 1
 
-        return (image_array, label_array)
+        return transform((image_array, label_array))
 
-    def batch_generator(self, batch_size, mod=lambda x: x):
+    def batch_generator(self, batch_size, transform=lambda x: x):
         '''
         A generator that will yield batches of training data
         NOTE: this generator never terminates, so don't do something like list(batch_generator)
 
-        mod: an optional function that modifies the raw images and labels returned by get_image_batch
+        transform: an optional function that modifies the raw images and labels returned by get_image_batch
         and returns a new tupel (images, labels)
         '''
         while True:
-            (images, labels) = self.get_image_batch(batch_size)
-            yield mod((images, labels))
+            (images, labels) = self.get_image_batch(batch_size, transform)
+            yield (images, labels)
